@@ -16,7 +16,7 @@ const MAIN_MENU = Markup.inlineKeyboard([
   [Markup.button.callback('💳 Купить подписку', 'buy_sub')],
   [Markup.button.callback('🎁 Пригласить друга', 'invite_friends')],
   [Markup.button.callback('🌐 Веб-портал', 'web_portal')],
-  [Markup.button.url('💬 Поддержка', 'https://t.me/podder5')]
+  [Markup.button.url('💬 Поддержка', 'https://t.me/dzensupport17')]
 ]);
 
 async function sendMainMenu(ctx: any, edit = false) {
