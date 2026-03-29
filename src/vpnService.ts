@@ -2,14 +2,16 @@ import axios from 'axios';
 import { randomUUID } from 'crypto';
 import https from 'https';
 
+import { config } from '../config.ts';
+
 const agent = new https.Agent({  
   rejectUnauthorized: false
 });
 
-const PANEL_URL = (process.env.VPN_PANEL_URL || 'https://108.165.174.229:2053/nAsKCqW4R7JCj6J0yR/').replace(/\/+$/, '') + '/';
-const USERNAME = process.env.VPN_PANEL_USERNAME || 'admin';
-const PASSWORD = process.env.VPN_PANEL_PASSWORD || 'Solbon5796+-';
-const INBOUND_IDS = (process.env.VPN_INBOUND_IDS || '1,2').split(',').map(id => parseInt(id.trim())).filter(id => !isNaN(id));
+const PANEL_URL = config.VPN_PANEL_URL.replace(/\/+$/, '') + '/';
+const USERNAME = config.VPN_PANEL_USERNAME;
+const PASSWORD = config.VPN_PANEL_PASSWORD;
+const INBOUND_IDS = config.VPN_INBOUND_IDS.split(',').map(id => parseInt(id.trim())).filter(id => !isNaN(id));
 
 let cookie = '';
 
@@ -228,7 +230,7 @@ async function addClientToInbound(inboundId: number, email: string, clientUuid: 
     const reality = streamSettings?.realitySettings || streamSettings?.settings?.realitySettings || {};
     const realityInner = reality.settings || {};
 
-    const publicKey = reality.publicKey || realityInner.publicKey || process.env.VPN_PUBLIC_KEY;
+    const publicKey = reality.publicKey || realityInner.publicKey || config.VPN_PUBLIC_KEY;
     const shortId = reality.shortIds?.[0] || realityInner.shortIds?.[0] || '';
     const serverName = reality.serverNames?.[0] || realityInner.serverNames?.[0] || 'google.com';
     const spiderX = reality.spiderX || realityInner.spiderX || '/';

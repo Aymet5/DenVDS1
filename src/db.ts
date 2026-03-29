@@ -17,8 +17,8 @@ if (fs.existsSync(oldDbPath) && !fs.existsSync(newDbPath)) {
   fs.renameSync(oldDbPath, newDbPath);
 }
 
-// По умолчанию используем папку data, но можно переопределить через переменную окружения DB_PATH
-const dbPath = process.env.DB_PATH || newDbPath;
+// По умолчанию используем папку data
+const dbPath = newDbPath;
 export const db = new Database(dbPath);
 
 db.exec(`

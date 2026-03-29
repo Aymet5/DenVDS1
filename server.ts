@@ -8,17 +8,18 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import nodemailer from "nodemailer";
 import crypto from "crypto";
+import { config } from "./config.ts";
 
-const JWT_SECRET = process.env.JWT_SECRET || "super-secret-jwt-key-for-vpn-bot";
+const JWT_SECRET = config.JWT_SECRET;
 
 // Nodemailer setup
 const transporter = nodemailer.createTransport({
-  host: process.env.SMTP_HOST || "smtp.mail.ru",
-  port: parseInt(process.env.SMTP_PORT || "465"),
-  secure: process.env.SMTP_SECURE !== "false", // true by default for 465
+  host: config.SMTP_HOST,
+  port: config.SMTP_PORT,
+  secure: config.SMTP_SECURE,
   auth: {
-    user: process.env.SMTP_USER || "dzenvds@mail.ru",
-    pass: process.env.SMTP_PASS || "wGDmcpx6m3Hmnplol3Az",
+    user: config.SMTP_USER,
+    pass: config.SMTP_PASS,
   },
 });
 
@@ -155,12 +156,12 @@ async function startServer() {
     const expires = new Date(Date.now() + 3600000).toISOString(); // 1 hour
     setResetToken(user.telegram_id, resetToken, expires);
 
-    const appUrl = process.env.APP_URL || "https://dzenvds.ru";
+    const appUrl = config.APP_URL;
     const resetLink = `${appUrl}/reset-password?token=${resetToken}`;
     
     try {
       await transporter.sendMail({
-        from: process.env.SMTP_USER || "dzenvds@mail.ru",
+        from: config.SMTP_USER,
         to: user.email!,
         subject: "Восстановление пароля DzenVDS",
         text: `Вы запросили восстановление пароля.\n\nПерейдите по ссылке для сброса: ${resetLink}\n\nСсылка действительна 1 час.`,
@@ -242,7 +243,7 @@ async function startServer() {
     }
     const token = crypto.randomBytes(16).toString('hex');
     setSyncToken(user.telegram_id, token);
-    const botUsername = process.env.BOT_USERNAME || 'dzen17_bot';
+    const botUsername = config.BOT_USERNAME;
     res.json({ link: `https://t.me/${botUsername}?start=sync_${token}` });
   });
 
@@ -277,7 +278,7 @@ async function startServer() {
   // Admin API routes
   const requireAdmin = (req: express.Request, res: express.Response, next: express.NextFunction) => {
     const pass = req.headers.authorization;
-    if (pass === (process.env.ADMIN_PASSWORD || 'Solbon5796+-')) {
+    if (pass === config.ADMIN_PASSWORD) {
       next();
     } else {
       res.status(401).json({ error: "Unauthorized" });

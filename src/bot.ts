@@ -3,19 +3,20 @@ import bcrypt from 'bcryptjs';
 import { createYookassaPayment, getYookassaPaymentStatus } from './yookassaService.ts';
 import { getUser, getUserByEmail, updateUserEmail, updateUserPassword, createUser, updateSubscription, updateVpnConfig, getAllUsers, createPendingPayment, getPendingPayment, updatePaymentStatus, updateExpirationNotification, updateConnectionLimit, addDaysToUser, update3DayNotification, createPromoCode, usePromoCode, getPromoCode, getAllPromoCodes, deletePromoCode, updateZeroTrafficNotification, createWithdrawal, getUserBySyncToken, mergeWebUserToTelegram } from './db.ts';
 import { generateVlessConfig, deleteClient, updateClientExpiry, getClientTraffic } from './vpnService.ts';
+import { config } from '../config.ts';
 
-const BOT_TOKEN = process.env.BOT_TOKEN || '8208808548:AAEviTJFiNHPn960E3RRHi0_PtKvJ_Nya3s';
-const ADMIN_IDS = (process.env.ADMIN_IDS || '5446101221').split(',').map(id => parseInt(id.trim())).filter(id => !isNaN(id));
+const BOT_TOKEN = config.BOT_TOKEN;
+const ADMIN_IDS = config.ADMIN_IDS.split(',').map(id => parseInt(id.trim())).filter(id => !isNaN(id));
 const adminStates: Record<number, { mode: string, email?: string }> = {};
 export const bot = new Telegraf(BOT_TOKEN);
 
 const MAIN_MENU = Markup.inlineKeyboard([
-  [Markup.button.callback('🚀 Получить конфигурацию', 'get_vpn')],
+  [Markup.button.callback('🚀 Получить VPN', 'get_vpn')],
   [Markup.button.callback('👤 Моя подписка', 'my_sub'), Markup.button.callback('📖 Инструкция', 'how_to')],
   [Markup.button.callback('💳 Купить подписку', 'buy_sub')],
   [Markup.button.callback('🎁 Пригласить друга', 'invite_friends')],
   [Markup.button.callback('🌐 Веб-портал', 'web_portal')],
-  [Markup.button.url('💬 Поддержка', 'https://t.me/dzensupport17')]
+  [Markup.button.url('💬 Поддержка', 'https://t.me/podder5')]
 ]);
 
 async function sendMainMenu(ctx: any, edit = false) {
@@ -31,8 +32,8 @@ async function sendMainMenu(ctx: any, edit = false) {
   }
 }
 
-const YOOKASSA_PROVIDER_TOKEN = process.env.YOOKASSA_PROVIDER_TOKEN || '390540012:LIVE:90657';
-const TEST_YOOKASSA_TOKEN = process.env.TEST_YOOKASSA_TOKEN || '381764678:TEST:168868';
+const YOOKASSA_PROVIDER_TOKEN = config.YOOKASSA_PROVIDER_TOKEN;
+const TEST_YOOKASSA_TOKEN = config.TEST_YOOKASSA_TOKEN;
 
 const SUBSCRIPTION_PLANS = [
   { id: '1', label: '1 месяц', months: 1, price: 99, description: 'Базовый доступ на 30 дней' },

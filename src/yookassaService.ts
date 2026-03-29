@@ -1,9 +1,10 @@
 import axios from 'axios';
 import { v4 as uuidv4 } from 'uuid';
+import { config } from '../config.ts';
 
-const SHOP_ID = process.env.YOOKASSA_SHOP_ID || '1286804';
-const SECRET_KEY = process.env.YOOKASSA_SECRET_KEY || 'live_WU9hoIbityPkmu6luY14oQFDnMgNJ0KCWHAt5vUHIPY';
-const APP_URL = process.env.APP_URL || 'https://dzenvds.ru';
+const SHOP_ID = config.YOOKASSA_SHOP_ID;
+const SECRET_KEY = config.YOOKASSA_SECRET_KEY;
+const APP_URL = config.APP_URL;
 
 export async function createYookassaPayment(amount: number, description: string, metadata: any) {
   const auth = Buffer.from(`${SHOP_ID}:${SECRET_KEY}`).toString('base64');
