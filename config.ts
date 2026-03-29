@@ -10,7 +10,7 @@ export const config = {
   // НАСТРОЙКИ TELEGRAM БОТА
   // --------------------------------------------------------------------------
   // Токен твоего бота (получить у @BotFather)
-  BOT_TOKEN: '88208808548:AAEviTJFiNHPn960E3RRHi0_PtKvJ_Nya3s',
+  BOT_TOKEN: '8208808548:AAEhpjjqUIsxDQUDHnsnbniw7H4YkuiNwFY',
   
   // Юзернейм бота (без @), нужен для ссылок привязки аккаунта
   BOT_USERNAME: 'dzen17_bot',
